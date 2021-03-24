@@ -5,7 +5,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 
 verticies = (
-    (1, -1, -2),
+    (1, -1, -1),
     (1, 1, -1),
     (-1, 1, -1),
     (-1, -1, -1),
@@ -30,8 +30,27 @@ edges = (
     (5, 7),
 )
 
+surfaces = (
+  (0,1,2,2),
+  (3,2,7,6),
+  (6,7,5,4),
+  (4,5,1,0),
+  (1,5,7,2),
+  (4,0,3,6),
+) 
+
 
 def cube():
+    
+    glBegin(GL_QUADS)
+    for surface  in surfaces:
+      glColor3fv((1,0,0))
+      for vertex in surface:
+        glVertex3fv(verticies[vertex])
+    glEnd()
+    
+
+
     glBegin(GL_LINES)
     for edge in edges:
         for vertex in edge:
@@ -46,7 +65,7 @@ def main():
 
     gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
 
-    glTranslatef(0.0, 0.0, -5)
+    glTranslatef(0.0, 0.0, -10)
     glRotatef(0, 0, 0, 0)
 
     while True:
@@ -54,8 +73,17 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.KEYDOWN:
+              if event.key == pygame.K_LEFT:
+               glTranslatef(-0.1, 0.0, 0.0) 
+              if event.key == pygame.K_RIGHT:
+               glTranslatef(0.1, 0.0, 0.0)
+              if event.key == pygame.K_UP:
+               glTranslatef(0.0, 0.1, 0.0)
+              if event.key == pygame.K_DOWN:
+               glTranslatef(0.1, -0.1, 0.0) 
 
-        glRotatef(1, 3, 2, 0)
+        #glRotatef(1, 0, 5, 0)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         cube()
         pygame.display.flip()
